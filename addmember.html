@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset = "utf-8" />
+   <title>WebSocket Chat Register Page</title>
+   <style>
+		*{
+			margin:0px;
+			padding:0px;
+		}
+		body{
+			  font-size:120%;
+			  background:#F8F8FF;
+			}
+		.header{
+				 width: 30%;
+				 margin: 50px auto 0px;
+				 color: white;
+				 background: #5F9EA0;
+				 text-align: center;
+				 border: 1px solid #B0C4DE;
+				 border-bottom:none;
+				 border-radius: 10px 10px 0px 0px;
+				 padding: 20px;
+				}	
+		form{
+				width: 30%;
+				 margin: 0px auto;
+				 padding: 20px;
+				 border: 1px solid #B0C4DE;
+				 background: white;
+				 border-radius: 0px 0px 10px 10px;
+				
+			}
+		.input-group{
+						margin: 10px 0px 10px 0px;
+					}
+		.input-group label{
+							display: block;
+							text-align: left;
+							margin: 3px;
+							}	
+		
+		.input-group input{
+							height: 30px;
+							width: ;
+							padding: 5px 10px;
+							font-size: 16px;
+							border-radius: 5px;
+							border: 1px solid gray;
+							}
+		#button{
+			padding: 10px;
+			font-size: 15px;
+			color: white;
+			background: #5F9EA0;
+			border: none;
+			border-radius: 5px:
+			}	
+					ul{
+				list-style-type: none;
+				margin: 0;
+				padding: 20px;
+				overflow: hidden;
+				background-color: #333333;
+			}
+
+			li {
+				float: left;
+			}
+
+			li a {
+				display: block;
+				color: white;
+				text-align: center;
+				padding: 16px;
+				text-decoration: none;
+				}
+
+			li a:hover {
+				background-color: #111111;
+			}
+			a:link {
+				background-color: transparent;
+				text-decoration: none;
+			}
+			a:visited {
+
+				background-color: transparent;
+				text-decoration: none;
+			}
+			a:hover {
+				color: red;
+				background-color: transparent;
+				text-decoration: underline;
+			}
+			a:active {
+				color: yellow;
+				background-color: transparent;
+				text-decoration: underline;
+			}
+   </style>
+</head>
+<body>
+
+
+<script language = "javascript" type = "text/javascript">
+     var wsUri = "ws://localhost:1234/";
+     var output;
+	 var parsedResponse;
+
+	 output = document.getElementById("output");
+		
+		
+     function init() {
+			 output = document.getElementById("output");
+			 output.innerHTML="NOT CONNECTED";
+			 output.style.color = "red"
+			  websocket = new WebSocket(wsUri);
+			 websocket.onopen = function(evt) {
+					output.innerHTML="CONNECTED To Server ";
+					output.style.color = "green"
+			 };
+			 
+			 
+			 websocket.onmessage = function (event) {
+				   //output.innerHTML+=event.data +"<br/>";
+				   parsedResponse = JSON.parse(event.data);
+				   
+				   if ( parsedResponse.response == "valid"){
+				   output.innerHTML += 'SUCCESS';
+				    window.alert("Registration Successful!");
+				   }
+				   else 
+				   window.alert("Invalid input. (maybe) already registered username!");
+				}
+		 
+		 }
+		 
+	window.addEventListener("load", init, false);
+	
+		 
+	 function sendLoginData() {
+		var id = document.getElementById("txtid");
+		var pass = document.getElementById("txtpassword");
+		var name = document.getElementById("txtname");
+		var bday = document.getElementById("bday");
+		var mail = document.getElementById("email");
+		var gender = document.getElementById("gender");
+		var membertype = document.getElementById("membertip");
+		var city = document.getElementById("city");
+		var add = document.getElementById("message");
+		var tel = document.getElementById("tel");
+		var astatus = document.getElementById("amountstatus");
+		var startdate = document.getElementById("start"); 
+		var ptrainer = document.getElementById("ptrainer");
+		var facility = document.getElementById("facility");
+		var weight = document.getElementById("weight");
+		var height = document.getElementById("height");
+		   
+	// Tell the server we want to send something to the other client
+			var data = {
+				"to": "register",
+				"textid": id.value,
+				"textname": name.value,
+				"textbday": bday.value,
+				"textmail": mail.value, 
+				"textgender": gender.value,
+				"textmembertype": membertype.value,
+				"textcity": city.value,
+				"textaddress": add.value,
+				"texttel": tel.value,
+				"textamount": astatus.value,
+				"textstart": startdate.value,
+				"texttrainer": ptrainer.value,
+				"textfacility":facility.value,
+				"textweight": weight.value,
+				"textheight": height.value,
+				"textpass": pass.value
+			};
+			
+			var message = JSON.stringify(data);
+			
+			websocket.send(message);
+      }
+
+
+</script>
+
+
+<div id = "output"></div>
+
+
+
+	<ul>
+		  <li><a href="addmember.html">Add Member</a></li>
+		  <li><a href="updatemember.html">Update Member</a></li>
+		  <li><a href="findmember.html">Find Member</a></li>
+		  <li><a href="deletemember.html">Delete Member</a></li>
+		  <li><a href="viewall.html">View All</a></li>
+		  <li><a href="index.html">Exit</a></li>
+		</ul>
+		
+		<div class="header">
+		<h2>New Member</h2>
+		</div>	
+		<form>
+			  <div class="input-group">
+				 <label>ID :</label>
+				<input type="text" id="txtid">  <br/>
+			</div>
+			<div class="input-group">
+				 <label> Name :</label>
+				<input type="text" id="txtname">  <br/>
+			</div>	
+			<div class="input-group">	
+				 <label>Gender :</label>
+				<input type="radio" id="gender" value="male" checked> Male<br>
+				<input type="radio" id="gender" value="female"> Female<br><br>
+			</div>
+			<div class="input-group">		
+				 <label>Date Of Birth :</label>
+				<input type="date" id="bday"> <br><br>
+			</div>	
+			<div class="input-group">		
+				 <label>Weight :</label>
+				<input type="text" id="weight"> <br><br>
+			</div>	
+			<div class="input-group">		
+				 <label>Height :</label>
+				<input type="text" id="height"> <br><br>
+			</div>	
+			<div class="input-group">
+				 <label>E-mail :</label>
+				<input type="email" id="email" placeholder="mail@example.com"> <br/>
+			</div>
+			<div class="input-group">		
+				 <label>City :</label>
+				 <select id="city">
+					<option value="Adana">Adana</option>
+					<option value="Izmir">Izmir</option>
+					<option value="Manisa">Manisa</option>
+					<option value="Istanbul">Istanbul</option>
+				 </select>
+			</div>
+			<div class="input-group">	
+				<label>Address :</label>
+				<textarea id="message" rows="5" cols="40"></textarea>
+			</div>	
+			<div class="input-group">
+				 <label>Telephone :</label>
+				<input type="tel" id="tel">
+			</div>	
+			<div class="input-group">	
+				 <label>Password :<label>
+				<input type="password" id="txtpassword"> <br/>
+			</div>	
+			<div class="input-group">		
+				 <label>Member Type :</label>
+				  <select id="membertip">
+					<option value="Monthly">Monthly</option>
+					<option value="3 Monthly">3 Monthly</option>
+					<option value="6 Monthly">6 Monthly</option>
+					<option value="Yearly">Yearly</option>
+				  </select>
+			</div>
+			<div class="input-group">		
+				 <label>Amount Status :</label>
+				  <select id="amountstatus">
+					<option value="Paid">Paid</option>
+					<option value="Balance">Balance</option>
+				  </select>
+			</div>
+			<div class="input-group">		
+				 <label>Start Date :</label>
+				<input type="date" id="start">
+			</div>
+			<div class="input-group">			
+				<label>Personal Trainer :</label>
+				 <select id="ptrainer">
+					<option value="Jenny">Jenny</option>
+					<option value="Marry">Marry</option>
+					<option value="Olivia">Olivia</option>
+				 </select>
+			</div>	 
+			<div class="input-group">		 
+				<label>Facility :</label>
+				 <select id="facility">
+					<option value="Body">Body</option>
+					<option value="Fitness">Fitness</option>
+					<option value="Yoga">Yoga</option>
+				 </select>
+			</div>	 
+			<div class="input-group">		
+				<button type="button" id="button" onclick="sendLoginData()">Register</button>
+			</div>
+		
+							
+			</form>
+
+
+</br>
+
+</body>

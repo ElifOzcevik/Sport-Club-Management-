@@ -1,0 +1,180 @@
+<html>
+	<head>
+	<style>
+
+			ul{
+				list-style-type: none;
+				margin: 0;
+				padding: 20px;
+				overflow: hidden;
+				background-color: #333333;
+			}
+
+			li {
+				float: left;
+			}
+
+			li a {
+				display: block;
+				color: white;
+				text-align: center;
+				padding: 16px;
+				text-decoration: none;
+				}
+
+			li a:hover {
+				background-color: #111111;
+			}
+			a:link {
+				background-color: transparent;
+				text-decoration: none;
+			}
+			a:visited {
+
+				background-color: transparent;
+				text-decoration: none;
+			}
+			a:hover {
+				color: red;
+				background-color: transparent;
+				text-decoration: underline;
+			}
+			a:active {
+				color: yellow;
+				background-color: transparent;
+				text-decoration: underline;
+			}
+			*{
+				margin:0px;
+				padding:0px;
+			}
+			body{
+				font-size:120%;
+				background:#F8F8FF;
+				}
+			.header{
+					width: 30%;
+					margin: 50px auto 0px;
+					color: white;
+					background: #5F9EA0;
+					text-align: center;
+					border: 1px solid #B0C4DE;
+					border-bottom:none;
+					border-radius: 10px 10px 0px 0px;
+					padding: 20px;
+					}	
+			form{
+					width: 30%;
+					margin: 0px auto;
+					padding: 20px;
+					border: 1px solid #B0C4DE;
+					background: white;
+					border-radius: 0px 0px 10px 10px;
+				
+				}
+			.input-group{
+							margin: 10px 0px 10px 0px;
+						}
+			.input-group label{
+								display: block;
+								text-align: left;
+								margin: 3px;
+								}	
+			
+			.input-group input{
+								height: 30px;
+								width: ;
+								padding: 5px 10px;
+								font-size: 16px;
+								border-radius: 5px;
+								border: 1px solid gray;
+								}
+			#button{
+				padding: 10px;
+				font-size: 15px;
+				color: white;
+				background: #5F9EA0;
+				border: none;
+				border-radius: 5px:
+				}	
+
+		</style>
+	</head>
+	<body>
+		<script language = "javascript" type = "text/javascript">
+			  //var wsUri = "ws://echo.websocket.org/";
+			  var wsUri = "ws://localhost:1234/";
+			  var output;
+			  var parsedResponse;
+				output = document.getElementById("output");
+				
+			  function init() {
+						 output = document.getElementById("output");
+						 output.innerHTML="NOT CONNECTED";
+						  websocket = new WebSocket(wsUri);
+						  
+						 websocket.onopen = function(evt) {
+								output.innerHTML="CONNECTED To Server";
+								output.style.color = "green"
+
+						 };
+						 
+						 websocket.onmessage = function (event) {
+							 var demo = document.getElementById("demo");
+							   output.innerHTML+=event.data +"<br/>";
+							   parsedResponse = JSON.parse(event.data);
+								   
+							if ( parsedResponse.response == "valid"){
+							    window.alert("Data deleted!");
+							   
+									}
+							  else 
+							   window.alert("Deleting Failed!");
+							   
+						}
+							   
+								
+				 
+					}
+			 window.addEventListener("load", init, false);
+				 
+				 
+			function sendData() {
+					var id= document.getElementById("txtid");
+					var pass = document.getElementById("txtpassword");
+					var data = {
+						"to": "delete",
+						"textid": id.value
+						};
+					var message = JSON.stringify(data);
+					websocket.send(message);
+			  }
+
+
+		</script>
+
+		<div id = "output"></div>
+		
+		<ul>
+		  <li><a href="addmember.html">Add Member</a></li>
+		  <li><a href="updatemember.html">Update Member</a></li>
+		  <li><a href="findmember.html">Find Member</a></li>
+		  <li><a href="">Delete Member</a></li>
+		  <li><a href="viewall.html">View All</a></li>
+		  <li><a href="index.html">Exit</a></li>
+		</ul>
+		<div class="header">
+		<h2>Delete Member</h2>
+		</div>	
+			<form>
+				<div class="input-group">
+					<label>Please, Enter the ID :</label>
+					<input type="text" id="txtid">  <br/>
+				</div>
+				<div class="input-group">		
+					<button type="button" id="button" onclick="sendData()">Delete</button>
+				</div>
+			</form>	
+			<div id = "result"></div>		
+	</body>
+</html>

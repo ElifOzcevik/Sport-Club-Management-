@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset = "utf-8" />
+   <title>WebSocket Chat Index/Login Page</title>
+   <style>
+   
+*{
+			margin:0px;
+			padding:0px;
+		}
+		body{
+				background: url('images/price-bg.jpg') 50% 0 repeat-y fixed;
+				-webkit-background-size: cover;
+				background-size: cover;
+				background-position: center center;
+				color: #ffffff;
+				}
+		
+	.header{
+				 width: 30%;
+				 margin: 50px auto 0px;
+				 color: white;
+				 background: #5F9EA0;
+				 text-align: center;
+				 border: 1px solid #B0C4DE;
+				 border-bottom:none;
+				 border-radius: 10px 10px 0px 0px;
+				 padding: 20px;
+				}	
+	form{
+				width: 30%;
+				 margin: 0px auto;
+				 padding: 20px;
+				 border: 1px solid #B0C4DE;
+				 background: white;
+				 border-radius: 0px 0px 10px 10px;
+				
+			}
+		.input-group{
+						margin: 10px 0px 10px 0px;
+						color:black;
+					}
+		.input-group label{
+							display: block;
+							text-align: left;
+							margin: 3px;
+							}	
+		
+		.input-group input{
+							height: 30px;
+							width: ;
+							padding: 5px 10px;
+							font-size: 16px;
+							border-radius: 5px;
+							border: 1px solid gray;
+							}
+		#button{
+			padding: 10px;
+			font-size: 15px;
+			color: white;
+			background: #5F9EA0;
+			border: none;
+			border-radius: 5px:
+			}		
+   </style>
+</head>
+<body>
+
+
+	<script language = "javascript" type = "text/javascript">
+			  //var wsUri = "ws://echo.websocket.org/";
+			  var wsUri = "ws://localhost:1234/";
+			  var output;
+			  var parsedResponse;
+				output = document.getElementById("output");
+				
+			  function init() {
+						 output = document.getElementById("output");
+						 output.innerHTML="NOT CONNECTED";
+						  websocket = new WebSocket(wsUri);
+						  
+						 websocket.onopen = function(evt) {
+								output.innerHTML="CONNECTED To Server";
+								output.style.color = "green"
+
+						 };
+						 
+						 websocket.onmessage = function (event) {
+							   var demo = document.getElementById("demo");
+							   output.innerHTML+=event.data +"<br/>";
+							   parsedResponse = JSON.parse(event.data);
+							   
+							   if ( parsedResponse.response == "valid"){
+							   output.innerHTML += 'SUCCESS';
+							   window.location.href = 'management.html';
+							   }
+							   else 
+							   window.alert("Wrong Username or Password!");
+							   
+								}
+				 
+					}
+			 window.addEventListener("load", init, false);
+				 
+				 
+			function sendLoginData() {
+					var id = document.getElementById("txtid");
+					var pass = document.getElementById("txtpassword");
+					var data = {
+						"to": "passwordcheck2",
+						"textid": id.value,
+						"textpass": pass.value
+						};
+					var message = JSON.stringify(data);
+					websocket.send(message);
+			  }
+
+
+		</script>
+
+
+		<div id = "output"></div>
+
+				 <div class="header">
+						<h2>Admin Login</h2>
+				</div>
+				<form class='form'>
+					<div class="input-group">
+						<label> ID: </label> 
+						<input type="text" id="txtid">
+					</div>
+					<div class="input-group">
+					    <label> Password: </label> 
+					    <input type="password" id="txtpassword">
+					<div class="input-group">	
+						<button type="button" id="button" onclick="sendLoginData()">Login  </button>
+					</div>	
+				</form>
+					
+	</body>
